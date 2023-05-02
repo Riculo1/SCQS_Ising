@@ -1,16 +1,3 @@
-/AiryTest.png
-/Dispersion Relation Test.png
-/Golden Ratio for D=40.png
-/Heatmap Airy overlay low hz.png
-/Heatmap Airy test D=40 exc=1 low hz.png
-/Heatmap Airy test D=40 exc=2 low hz.png
-/Heatmap Airy test D=40 exc=3 low hz.png
-/Heatmap Airy test D=40 exc=4 low hz.png
-/Heatmap Airy test D=40 exc=5 low hz.png
+# ignore figures
+*.png
 /help.txt
-/HzScaling D=30.png
-/HzScaling D=4 ipv 30.png
-/HzScaling D=50 ipv 30.png
-/magnetization.png
-/Magnetizations.png
-/Weird Dispersion Relation.png
