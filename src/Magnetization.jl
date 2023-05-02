@@ -1,9 +1,13 @@
-# Created 08/04/2023 by Ian Lateur
-# Analysing the magnetization of ground states
-
 using TensorKit, TensorOperations
 using MPSKit, MPSKitModels
 using Plots
+
+#=
+Analysing the magnetization of ground states
+=#
+
+# Integrators
+VUMPS_alg = VUMPS(maxiter=200)
 
 J = 1.0
 hz_tuple = (0., 0.01, 0.1, 1.0)
@@ -27,7 +31,7 @@ for hz in hz_tuple
 
         # ground state of new H
         H = transverse_field_ising(; J=J, hx=g, hz=hz)
-        Ψ_groundstate, envs, δ = find_groundstate(Ψ, H, VUMPS(maxiter=200))
+        Ψ_groundstate, envs, δ = find_groundstate(Ψ, H, VUMPS_alg)
         
         # Magnetization
         m = expectation_value(Ψ_groundstate, Sz)

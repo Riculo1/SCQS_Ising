@@ -5,6 +5,11 @@ using Statistics
 using LinearAlgebra
 using JLD2
 
+#=
+This code creates a heatmap for every excitation with g on the x-axis and hz on the y-axis.
+The color indicates the relative difference with the theoretical value.
+=#
+
 # Integrators
 VUMPS_alg = VUMPS(verbose=false)
 QuasiparticleAnsatz_alg = QuasiparticleAnsatz()
@@ -16,7 +21,8 @@ bondD = [40]  # Bond dimension
 gs = collect(range(0, 0.5, length=41))  # g values
 gs[1] = 0.001  # Should not start at 0
 gs[end] = 0.499  # Should not end at 0.5, because division by 0
-hzs = collect(range(0, 0.1, length=41))  # hz values
+hzs = collect(range(0, 0.1, length=41)) # hz values
+append!(hzs, collect(range(0, 1, length=41))[6:end])
 hzs[1] = 0.0002  # Should not start at 0
 momenta = 0  # Momenta
 num = 5  # Number of excitations
@@ -35,7 +41,7 @@ for D in bondD
     for (i,g) in enumerate(gs)
         for (j,hz) in enumerate(hzs)
 
-            # Airy
+            # Theoretical value
             E0 = (1-2g)/2
             A = (hz)^(2/3)*(g/(1-2g))^(1/3)
             theory = (airy .* A .+ 2*E0)[1:num]
@@ -102,12 +108,12 @@ for D in bondD
     overlay = zeros(length(hzs), length(gs))
     for (m,to_plot) in enumerate(diff)
         overlay = max.(overlay, to_plot)
-        plt = heatmap(gs, hzs, to_plot, c=:thermal, xlabel = "g", ylabel = "hz", colorbar_title = "error", title="Relative error for excitation $m\nWith k = $momenta and bond dimension D = $D")
-        savefig(plt, "Heatmap Airy test D=$D exc=$m low hz.png")
+        plt = heatmap(gs, hzs, to_plot, clim=(0, 0.1), c=:thermal, xlabel = "g", ylabel = "hz", colorbar_title = "error", title="Relative error for excitation $m\nWith k = $momenta and bond dimension D = $D")
+        savefig(plt, "Heatmap Airy D=$D exc=$m HD.png")
     end
     plt2 = heatmap(gs, hzs, overlay, c=:thermal, clim=(0, 0.1), xlabel = "g", ylabel = "hz", colorbar_title = "error", title="Maximum relative error\nWith k = $momenta and bond dimension D = $D")
 
-    savefig(plt2, "Heatmap Airy overlay low hz.png")
+    savefig(plt2, "Heatmap Airy overlay HD.png")
     println("")
 end
 
