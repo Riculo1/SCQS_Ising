@@ -1,15 +1,14 @@
 using TensorKit, TensorOperations
 using MPSKit, MPSKitModels
 using Plots
-using JLD
 
 VUMPS_alg = VUMPS(verbose=false)
 
-g = 0.05
-hz = 0.01
+g = 0.25
+hz = 0.0002
 momenta = [0]
-num = 10
-Ds = range(10, 50)
+num = 5
+Ds = range(10, 100, step=5)
 
 E0 = (1-2g)/2
 A = (hz)^(2/3)*(g/(1-2g))^(1/3)
@@ -34,7 +33,8 @@ for (i,D) in enumerate(Ds)
     clear_cache()
 end
 
-plt1 = plot(Ds, to_plot; label=["Excitation 1" "Excitation 2" "Excitation 3" "Excitation 4" "Excitation 5" "Excitation 6" "Excitation 7" "Excitation 8" "Excitation 9" "Excitation 10"], title="Excitation energy", xlabel="Bond dimension", ylabel="E", legend=:outertopright)
+labels = reshape(["Excitation $n" for n in range(1, num)], (1, num))
+plt1 = plot(Ds, to_plot; label=labels, title="Excitation energy", xlabel="Bond dimension", ylabel="E", legend=:outertopright)
 
 savefig(plt1, "airy bond test.png")
 
@@ -43,6 +43,6 @@ for (i, exc) in enumerate(to_plot)
     error[i] = abs.(exc .- theory[i])./theory[i]
 end
 
-plt2 = plot(Ds, error; label=["Excitation 1" "Excitation 2" "Excitation 3" "Excitation 4" "Excitation 5" "Excitation 6" "Excitation 7" "Excitation 8" "Excitation 9" "Excitation 10"], title="Excitation energy error", xlabel="Bond dimension", ylabel="|(E-theory)/theory|", legend=:outertopright, yaxis=:log)
+plt2 = plot(Ds, error; label=labels, title="Excitation energy error", xlabel="Bond dimension", ylabel="|(E-theory)/theory|", legend=:outertopright, yaxis=:log)
 
 savefig(plt2, "airy bond error test.png")
