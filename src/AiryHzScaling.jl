@@ -16,7 +16,7 @@ QuasiparticleAnsatz_alg = QuasiparticleAnsatz()
 airy = [2.33811, 4.08795, 5.52056, 6.7867144, 7.94413, 9.02265]  # zeros of airy function
 
 g = 0.0125
-hzs = collect(range(0, 0.025, length=21)) 
+hzs = collect(range(0, 0.025, length=11)) 
 hzs[1] = 0.0002  # don't use 0 exactly, otherwise no symmetry breaking
 momenta = 0
 num = 5  # Number of excitations
