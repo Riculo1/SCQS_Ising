@@ -2,6 +2,7 @@ using TensorKit, TensorOperations
 using MPSKit, MPSKitModels
 using Plots
 using JLD2
+using CurveFit
 
 #=
 Plotting ΔE(hz) to maybe see 3/2 power scaling
@@ -16,8 +17,7 @@ QuasiparticleAnsatz_alg = QuasiparticleAnsatz()
 airy = [2.33811, 4.08795, 5.52056, 6.7867144, 7.94413, 9.02265]  # zeros of airy function
 
 g = 0.0125
-hzs = collect(range(0, 0.025, length=11)) 
-hzs[1] = 0.0002  # don't use 0 exactly, otherwise no symmetry breaking
+hzs = collect(range(0.005, 0.010, length=11))
 momenta = 0
 num = 5  # Number of excitations
 D = 100  # Bond dimension
@@ -32,9 +32,9 @@ end
 
 plt = plot(title="ΔE(hz) for excited states", xlabel="hz", ylabel="ΔE")
 
+E0 = (1-2g)/2
+A = (hzs).^(2/3).*(g/(1-2g))^(1/3)
 for n in range(1, num)
-    E0 = (1-2g)/2
-    A = (hzs).^(2/3).*(g/(1-2g))^(1/3)
     theory = (airy[n] .* A .+ 2*E0)
     plot!(hzs, theory, label="Theory excitation $n", ls=:dash, color=n)
 end
@@ -74,7 +74,14 @@ for hz in hzs
 end
 
 for excitation in range(1, num)
-    plot!(plt, hzs, [ΔE[i][excitation] for i in range(1, length(hzs))], label="Computed excitation $excitation", color=excitation);
+    plot!(plt, hzs, [ΔE[i][excitation] for i in range(1, length(hzs))], label="Computed excitation $excitation", color=excitation, legend=:outertopright);
+end
+
+parameters = []
+for n in range(1, num)
+    a, b = power_fit(hzs, ([ΔE[i][n] for i in range(1, length(hzs))] .- 2*E0) ./airy[n] .*((1-2g)/g)^(1/3))
+    push!(parameters, [a, b])
+    @info "Excitation $n: a = $a and b = $b in f(hz) = a*hz^b"
 end
 
 savefig(plt, "HzScaling D = $D.png")

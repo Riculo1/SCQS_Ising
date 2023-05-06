@@ -11,10 +11,10 @@ VUMPS_alg = VUMPS(verbose=false)  # Ground state algorithm
 QuasiparticleAnsatz_alg = QuasiparticleAnsatz()  # Excitation algorithm
 
 g = 0.0125
-hz = 0.0002
+hz = 0.0025
 momenta = [0]
 num = 5  # Number of excitations
-Ds = range(10, 200, step=10)  # Bond dimensions
+Ds = range(10, 100, step=10)  # Bond dimensions
 
 # Theoretical solutions with zeros of the Airy function
 m0 = (1-2g)/2
