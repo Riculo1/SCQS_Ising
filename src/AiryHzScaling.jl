@@ -77,12 +77,15 @@ for excitation in range(1, num)
     plot!(plt, hzs, [ΔE[i][excitation] for i in range(1, length(hzs))], label="Computed excitation $excitation", color=excitation, legend=:outertopright);
 end
 
-parameters = []
-for n in range(1, num)
-    a, b = power_fit(hzs, ([ΔE[i][n] for i in range(1, length(hzs))] .- 2*E0) ./airy[n] .*((1-2g)/g)^(1/3))
-    push!(parameters, [a, b])
-    @info "Excitation $n: a = $a and b = $b in f(hz) = a*hz^b"
+E_list = []
+hz_list = []
+for n in range(1,num)
+    append!(E_list, ([ΔE[i][n] for i in range(1, length(hzs))] .- 2*E0) ./airy[n] .*((1-2g)/g)^(1/3))
+    append!(hz_list, hzs)
 end
+
+a, b = power_fit(hz_list, E_list)
+@info "a = $a and b = $b in f(hz) = a*hz^b"
 
 savefig(plt, "HzScaling D = $D.png")
 @show plt
