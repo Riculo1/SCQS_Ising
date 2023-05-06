@@ -38,7 +38,7 @@ for D in bondD
         m_array[i] = abs(real(m[1]))
     end
 
-    a, β = power_fit((gc.-g_range)./gc, m_array)
+    a, β = power_fit((gc.-g_range)./gc, m_array)  # Fit for m = a*((gc-g)/gc)^β
     @info "fit parameters are a = $a and β = $β for the function m = a*((gc-g)/gc)^β"
     
     mag_fit = plot(g_range, m_array, ls=:dash, title="Magnetisation with D = $D", xlabel="g", ylabel="m", label="calculated")
