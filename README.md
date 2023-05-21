@@ -14,13 +14,13 @@ Figure 16.
 Figure 9.
 
 ## GoldenratioBondDDiff.jl
-Figure 8
+Figure 8.
 
 ## MagnetisationBond.jl
-Figure 1
+Figure 1.
 
 ## Magnetisation.jl
-Figure 2
+Figure 2.
 
 ## Mexponent.jl
 Figure 4a and 4b.
